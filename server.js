@@ -28,6 +28,15 @@ app.get('/api/loans', (req, res) => {
   res.json(readLoans());
 });
 
+app.get('/api/loans/grouped', (req, res) => {
+  const loans = readLoans();
+  const grouped = {
+    pending: loans.filter((loan) => loan.status === 'Pending'),
+    paid: loans.filter((loan) => loan.status === 'Lunas')
+  };
+  res.json(grouped);
+});
+
 app.post('/api/loans', (req, res) => {
   const { name, amount, tenor, interestRate } = req.body;
   const principal = Number(amount);

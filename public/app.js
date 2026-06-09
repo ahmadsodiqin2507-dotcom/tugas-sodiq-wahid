@@ -24,29 +24,46 @@ function hideResult() {
 async function loadLoans() {
   loanList.innerHTML = '<p>Memuat data pengajuan...</p>';
   try {
-    const res = await fetch(apiBase);
-    const loans = await res.json();
-    if (!loans.length) {
+    const res = await fetch(`${apiBase}/grouped`);
+    const grouped = await res.json();
+    const pending = grouped.pending || [];
+    const paid = grouped.paid || [];
+
+    if (!pending.length && !paid.length) {
       loanList.innerHTML = '<p>Belum ada pengajuan pinjaman.</p>';
       return;
     }
 
-    loanList.innerHTML = loans.map((loan) => {
+    const renderGroup = (title, loans) => {
+      if (!loans.length) return '';
       return `
-        <div class="loan-card">
-          <p><strong>${loan.name}</strong></p>
-          <p>Jumlah: ${formatCurrency(loan.amount)}</p>
-          <p>Tenor: ${loan.tenor} bulan</p>
-          <p>Bunga: ${loan.interestRate}%</p>
-          <p>Angsuran per bulan: ${formatCurrency(loan.monthlyPayment)}</p>
-          <p>Total bayar: ${formatCurrency(loan.totalPayment)}</p>
-          <div class="loan-meta">
-            <span class="status ${loan.status}">${loan.status}</span>
-            ${loan.status === 'Pending' ? `<button data-id="${loan.id}">Bayar lunas</button>` : ''}
+        <div class="loan-group">
+          <h3>${title} (${loans.length})</h3>
+          <div class="loan-list-group">
+            ${loans
+              .map((loan) => {
+                return `
+                  <div class="loan-card">
+                    <p><strong>${loan.name}</strong></p>
+                    <p>Jumlah: ${formatCurrency(loan.amount)}</p>
+                    <p>Tenor: ${loan.tenor} bulan</p>
+                    <p>Bunga: ${loan.interestRate}%</p>
+                    <p>Angsuran per bulan: ${formatCurrency(loan.monthlyPayment)}</p>
+                    <p>Total bayar: ${formatCurrency(loan.totalPayment)}</p>
+                    <div class="loan-meta">
+                      <span class="status ${loan.status}">${loan.status}</span>
+                      ${loan.status === 'Pending' ? `<button data-id="${loan.id}">Bayar lunas</button>` : ''}
+                    </div>
+                  </div>
+                `;
+              })
+              .join('')}
           </div>
         </div>
       `;
-    }).join('');
+    };
+
+    loanList.innerHTML = `${renderGroup('Pengajuan Pending', pending)}${renderGroup('Pengajuan Lunas', paid)}`;
 
     document.querySelectorAll('.loan-card button').forEach((button) => {
       button.addEventListener('click', async () => {

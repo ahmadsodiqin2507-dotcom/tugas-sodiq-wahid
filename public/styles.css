@@ -103,6 +103,17 @@ button:hover {
   gap: 1rem;
 }
 
+.loan-group h3 {
+  margin: 0 0 1rem;
+  font-size: 1.1rem;
+  color: #1f2937;
+}
+
+.loan-list-group {
+  display: grid;
+  gap: 1rem;
+}
+
 .loan-card {
   border: 1px solid #e5e7eb;
   border-radius: 18px;
