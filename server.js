@@ -30,14 +30,27 @@ app.get('/api/loans', (req, res) => {
 
 app.post('/api/loans', (req, res) => {
   const { name, amount, tenor, interestRate } = req.body;
-  if (!name || !amount || !tenor || !interestRate) {
-    return res.status(400).json({ error: 'Lengkapi semua field pengajuan pinjaman.' });
-  }
-
   const principal = Number(amount);
   const months = Number(tenor);
   const rate = Number(interestRate) / 100;
-  const monthlyPayment = Number(((principal * rate) / (1 - Math.pow(1 + rate, -months))).toFixed(2));
+
+  if (
+    !name ||
+    Number.isNaN(principal) ||
+    principal <= 0 ||
+    Number.isNaN(months) ||
+    months <= 0 ||
+    Number.isNaN(rate) ||
+    rate < 0
+  ) {
+    return res.status(400).json({ error: 'Lengkapi semua field pengajuan pinjaman dengan nilai yang benar.' });
+  }
+
+  const monthlyPayment = Number(
+    (rate === 0
+      ? principal / months
+      : (principal * rate) / (1 - Math.pow(1 + rate, -months))).toFixed(2)
+  );
   const totalPayment = Number((monthlyPayment * months).toFixed(2));
 
   const loans = readLoans();

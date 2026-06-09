@@ -77,8 +77,16 @@ applyBtn.addEventListener('click', async () => {
   const tenor = Number(tenorInput.value);
   const interestRate = Number(interestInput.value);
 
-  if (!name || !amount || !tenor) {
-    showResult('Harap isi semua field dengan benar.');
+  if (
+    !name ||
+    Number.isNaN(amount) ||
+    amount <= 0 ||
+    Number.isNaN(tenor) ||
+    tenor <= 0 ||
+    Number.isNaN(interestRate) ||
+    interestRate < 0
+  ) {
+    showResult('Harap isi semua field pengajuan dengan nilai yang benar.');
     return;
   }
 
