@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pinjol Sederhana</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1>Pinjol Sederhana</h1>
+        <p>Ajukan pinjaman, hitung cicilan, dan kelola pengajuan dengan mudah.</p>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="card">
+        <h2>Simulasi Pinjaman</h2>
+        <div class="grid">
+          <label>
+            Nama
+            <input id="name" type="text" placeholder="Nama lengkap" />
+          </label>
+          <label>
+            Jumlah Pinjaman
+            <input id="amount" type="number" min="100000" placeholder="Rp" />
+          </label>
+          <label>
+            Tenor (bulan)
+            <input id="tenor" type="number" min="1" placeholder="12" />
+          </label>
+          <label>
+            Bunga (%)
+            <input id="interestRate" type="number" min="0" step="0.1" value="1.5" />
+          </label>
+        </div>
+        <button id="applyBtn">Ajukan Pinjaman</button>
+        <div id="result" class="result hidden"></div>
+      </section>
+
+      <section class="card">
+        <h2>Daftar Pengajuan</h2>
+        <div id="loanList" class="loan-list"></div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>&copy; 2026 Pinjol Sederhana. Hanya contoh demo.</p>
+      </div>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
